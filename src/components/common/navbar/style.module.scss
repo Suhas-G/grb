@@ -1,0 +1,49 @@
+@import "./../../../variables.scss";
+
+.navigationLinks {
+    flex-direction: row-reverse!important;
+
+    .active {
+        color: $accent-color!important;
+    }
+}
+
+.brand {
+
+    font-family: 'Unica One', cursive;
+    font-size: 1.5rem;
+
+    svg {
+        margin-right: 3px;
+        vertical-align: middle;
+        height: 0.8em;
+    }
+
+    .title {
+        font-weight: bold;
+    }
+
+    .cursor {
+        display: inline-block;
+        width: 12px;
+        height: 1em;
+        vertical-align: middle;
+        background-color: $accent-color;
+        animation: blink 1.5s infinite;
+        margin-left: 3px;
+    }
+}
+
+
+
+
+@keyframes blink {
+    0% {
+        background-color: transparent;
+    }
+
+    50% {
+        background-color: #e20063;
+    }
+}
+
