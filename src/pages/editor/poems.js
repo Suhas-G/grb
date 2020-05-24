@@ -7,8 +7,8 @@ const APIUrl =
 
 
 class PoemEditor extends Editor {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.dataType = "poems";
     this.postList = poemList.poems;
     this.APIUrl = APIUrl;
@@ -21,8 +21,14 @@ class PoemEditor extends Editor {
   componentDidMount() {
       if (this.postId) {
           const filename = this.postList[this.findPostById(this.postId, this.postList)].filename;
-          Axios.get(`./data/${this.dataType}/${filename}`)
-          .then(data => console.log(data))
+          Axios.get(`/data/${this.dataType}/${filename}`)
+          .then(response => {
+            const data = response.data;
+            this.setState({
+              title: data.title,
+              paragraphs: this.combineParagraphLines(data.paragraphs)
+            });
+          })
           .catch(error => console.error(error));
       }
   }
@@ -36,7 +42,7 @@ class PoemEditor extends Editor {
 
   findPostById(id, postList) {
     const postIndex = postList.findIndex((postData) => {
-      return postData.id === id;
+      return String(postData.id) === String(id);
     });
     return postIndex;
   }
@@ -47,6 +53,12 @@ class PoemEditor extends Editor {
       } else {
           return this.findMaximumId(this.postList) + 1;
       }
+  }
+
+  combineParagraphLines(paragraphs) {
+    return paragraphs.map((paragraph) => {
+      return paragraph.join("\n");
+    })
   }
 }
 

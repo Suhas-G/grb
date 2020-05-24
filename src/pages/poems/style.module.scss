@@ -1,0 +1,91 @@
+@import "../../variables.scss";
+
+
+.container {
+
+    .listTitle {
+        text-align: center;
+        margin-bottom: 2em;
+    }
+    
+    .poemList {
+    
+        .poemListItem {
+            padding: 0.5em 2em;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            background-color: $card-background;
+            margin-top: 0.5em;
+            border-radius: 5px;
+            
+            &:hover{
+                text-decoration: none;
+                color: black;
+                box-shadow: 0px 2px 2px 0px #00000033;
+            }
+        }
+    
+    }
+
+    .footer {
+        margin-top: 5em;
+        text-align: center;
+        .newButton {
+            padding: 0.5em 2em;
+            margin: 2em auto;
+            background-color: $accent-color;
+            position: relative;
+            text-decoration: none;
+            color: white;
+
+            &:hover {
+                text-decoration: none;
+                color: white;
+            }
+
+        }
+    }
+    
+}
+
+
+.poem {
+    padding-bottom: 5em;
+    .poemTitle {
+        text-align: center;
+    }
+    .paragraphs {
+        .paragraph {
+            margin: 2.5em auto;
+
+            .line {
+                text-align: center;
+                letter-spacing: 0.1em;
+                line-height: 1.5em;
+            }
+        }
+    }
+}
+
+.editButton {
+    position: fixed;
+    bottom: 2em;
+    right: 2em;
+    background-color: $accent-color;
+    padding: 1.2em;
+    border-radius: 50%;
+    text-decoration: none;
+    color: white;
+    box-sizing: content-box;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+
+    &:hover {
+        text-decoration: none;
+        color: white;
+    }
+}
+

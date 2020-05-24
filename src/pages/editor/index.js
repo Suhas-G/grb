@@ -19,8 +19,8 @@ class Editor extends Layout {
   };
 
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.dataType = 'posts';
     this.postList = [];
     this.APIUrl = '';
@@ -52,6 +52,7 @@ class Editor extends Layout {
               name="title"
               id="title"
               onChange={(event) => this.handleTitleChange(event)}
+              value={this.state.title}
             ></Form.Control>
             <div id="titleRequiredTooltip" style={{ display: "none" }}>
               Title is required
@@ -99,9 +100,10 @@ class Editor extends Layout {
       return (
         <React.Fragment key={index}>
           <div className={EditorStyles.paragraphField}>
-            <textarea
+            <textarea className="paragraphTextArea"
               onChange={(event) => this.handleParagraphChange(event, index)}
               value={value}
+              rows= {value.split(/\r?\n/).length}
             />
             <div>
               <Button

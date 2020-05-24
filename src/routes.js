@@ -3,6 +3,7 @@ import Home from "./pages/home";
 import PoemEditor from "./pages/editor/poems";
 import { Route } from "react-router-dom";
 import Poems from "./pages/poems";
+import Poem from "./pages/poems/poem";
 
 const defaultRoutes = [
     {
@@ -16,15 +17,21 @@ const defaultRoutes = [
         exact: true
     },
     {
-        path: "/poems/write",
+        path: "/poems/:id",
+        component: Poem,
+        exact: true
+    },
+    {
+        path: "/poems/:id/edit",
         component: PoemEditor,
         exact: true,
     },
     {
-        path: "/poems/write/:id",
+        path: "/write/poems",
         component: PoemEditor,
         exact: true,
-    }
+    },
+    
 ]
 
 
