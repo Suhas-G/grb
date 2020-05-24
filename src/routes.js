@@ -1,6 +1,6 @@
 import React from "react";
 import Home from "./pages/home";
-import Editor from "./pages/editor";
+import PoemEditor from "./pages/editor/poems";
 import { Route } from "react-router-dom";
 import Poems from "./pages/poems";
 
@@ -16,8 +16,13 @@ const defaultRoutes = [
         exact: true
     },
     {
-        path: "/write",
-        component: Editor,
+        path: "/poems/write",
+        component: PoemEditor,
+        exact: true,
+    },
+    {
+        path: "/poems/write/:id",
+        component: PoemEditor,
         exact: true,
     }
 ]

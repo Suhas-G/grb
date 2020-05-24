@@ -1,14 +1,31 @@
 import React from "react";
-import { Button, ButtonToolbar, Container, Form, Jumbotron } from "react-bootstrap";
+import {
+  Button,
+  ButtonToolbar,
+  Container,
+  Form,
+  Jumbotron,
+} from "react-bootstrap";
 import Layout from "../../components/layouts/baseLayout";
-import poems from "../../data/poems";
 import EditorStyles from "./style.module.scss";
+import axios from 'axios'
+
+
 
 class Editor extends Layout {
   state = {
     paragraphs: [""],
-    title: ""
+    title: "",
   };
+
+
+  constructor() {
+    super();
+    this.dataType = 'posts';
+    this.postList = [];
+    this.APIUrl = '';
+    this.postId = '';
+  }
 
   renderContent() {
     // this.initiateEditor();
@@ -30,8 +47,15 @@ class Editor extends Layout {
         <Container className={EditorStyles.editorContainer}>
           <div className={EditorStyles.titleField}>
             <label htmlFor="title">Title</label>
-            <Form.Control type="text" name="title" id="title" onChange = {(event) => this.handleTitleChange(event)}></Form.Control>
-            <div id="titleRequiredTooltip" style={{display: "none"}}>Title is required</div>
+            <Form.Control
+              type="text"
+              name="title"
+              id="title"
+              onChange={(event) => this.handleTitleChange(event)}
+            ></Form.Control>
+            <div id="titleRequiredTooltip" style={{ display: "none" }}>
+              Title is required
+            </div>
           </div>
           <div id="editorjs">{this.renderEditor()}</div>
         </Container>
@@ -43,10 +67,10 @@ class Editor extends Layout {
     this.state.title = event.target.value;
     const titleTooltip = document.getElementById("titleRequiredTooltip");
     titleTooltip.style.display = "none";
-    this.setState({title : this.state.title});
+    this.setState({ title: this.state.title });
   }
 
-  onSave = () => {
+  onSave = async () => {
     const titleTooltip = document.getElementById("titleRequiredTooltip");
     if (!this.state.title) {
       titleTooltip.style.display = "block";
@@ -54,16 +78,20 @@ class Editor extends Layout {
       return;
     }
     const data = {};
-    data.id = poems.length + 1;
-    data.paragraphs = this.state.paragraphs.filter((value) => value.trim() !== "");
+    data.dataType = this.dataType;
+    data.id = this.getPostId();
+    data.paragraphs = this.state.paragraphs.filter(
+      (value) => value.trim() !== ""
+    );
     data.title = this.state.title;
     data.time = new Date();
     console.log(data);
+    this.savePost(data);
   };
 
   onClear = () => {
     this.state.paragraphs = [""];
-    this.setState({paragraphs : this.state.paragraphs});
+    this.setState({ paragraphs: this.state.paragraphs });
   };
 
   renderEditor() {
@@ -112,7 +140,7 @@ class Editor extends Layout {
 
   onAddParagraph(event, index) {
     this.state.paragraphs.splice(index + 1, 0, "");
-    this.setState({paragraphs : this.state.paragraphs});
+    this.setState({ paragraphs: this.state.paragraphs });
   }
 
   onDeleteParagraph(event, index) {
@@ -122,8 +150,29 @@ class Editor extends Layout {
       this.state.paragraphs.splice(index, 1);
     }
 
-    this.setState({paragraphs : this.state.paragraphs});
+    this.setState({ paragraphs: this.state.paragraphs });
+  }
+
+  getPostId(){}
+
+  async savePost(data) {
+    axios({
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      },
+      method: "POST",
+      url: this.APIUrl,
+      data: data
+    }).then(data => {
+      console.log(data)
+    }).catch(error => {
+      console.error(error)
+    });
   }
 }
+
+
+
 
 export default Editor;
