@@ -5,33 +5,66 @@ import {
   Container,
   Form,
   Jumbotron,
+  Alert
 } from "react-bootstrap";
 import Layout from "../../components/layouts/baseLayout";
 import EditorStyles from "./style.module.scss";
-import axios from 'axios'
-
-
+import axios from "axios";
 
 class Editor extends Layout {
   state = {
     paragraphs: [""],
     title: "",
+    savePostSuccessful: false,
+    showSavePostResponse: false,
   };
-
 
   constructor(props) {
     super(props);
-    this.dataType = 'posts';
+    this.dataType = "posts";
     this.postList = [];
-    this.APIUrl = '';
-    this.postId = '';
+    this.APIUrl = "";
+    this.postId = "";
+  }
+
+  setAlertShow(show) {
+    this.setState({ showSavePostResponse: show });
+  }
+
+  getAlertMessage() {
+    if (this.state.showSavePostResponse) {
+      if (this.state.savePostSuccessful) {
+        return (
+          <Alert
+            show={this.state.showSavePostResponse}
+            variant="success"
+            onClose={() => this.setAlertShow(false)}
+            dismissible
+          >
+          Post saved successfully!
+          </Alert>
+        );
+      } else {
+        return (
+          <Alert
+            show={this.state.showSavePostResponse}
+            variant="danger"
+            onClose={() => this.setAlertShow(false)}
+            dismissible
+          >
+            Error happened while saving post!
+          </Alert>
+        );
+      }
+    }
   }
 
   renderContent() {
-    // this.initiateEditor();
+    const alertMessage = this.getAlertMessage();
     return (
       <Jumbotron className="content">
         <Container>
+          {alertMessage}
           <ButtonToolbar
             className={`justify-content-between ${EditorStyles.toolbar}`}
             aria-label="Toolbar with Button groups"
@@ -100,10 +133,11 @@ class Editor extends Layout {
       return (
         <React.Fragment key={index}>
           <div className={EditorStyles.paragraphField}>
-            <textarea className="paragraphTextArea"
+            <textarea
+              className="paragraphTextArea"
               onChange={(event) => this.handleParagraphChange(event, index)}
               value={value}
-              rows= {value.split(/\r?\n/).length}
+              rows={value.split(/\r?\n/).length}
             />
             <div>
               <Button
@@ -155,26 +189,35 @@ class Editor extends Layout {
     this.setState({ paragraphs: this.state.paragraphs });
   }
 
-  getPostId(){}
+  getPostId() {}
 
   async savePost(data) {
     axios({
       headers: {
         "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
+        "Access-Control-Allow-Origin": "*",
       },
       method: "POST",
       url: this.APIUrl,
-      data: data
-    }).then(data => {
-      console.log(data)
-    }).catch(error => {
-      console.error(error)
-    });
+      data: data,
+    })
+      .then((data) => {
+        console.log(data);
+        this.showSaveSuccess()
+      })
+      .catch((error) => {
+        console.error(error);
+        this.showSaveFail();
+      });
+  }
+
+  showSaveSuccess() {
+    this.setState({showSavePostResponse: true, savePostSuccessful: true})
+  }
+
+  showSaveFail() {
+    this.setState({showSavePostResponse: true, savePostSuccessful: false})
   }
 }
-
-
-
 
 export default Editor;

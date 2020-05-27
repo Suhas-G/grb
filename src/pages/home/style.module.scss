@@ -1,0 +1,32 @@
+@import "../../variables.scss";
+
+
+.row {
+    align-content: center;
+    align-items: center;
+
+    .imageContent {
+        padding: 20px;
+        max-width: 80%;
+        max-height: 540px;
+        margin: auto;
+
+        .avatar {
+            border-radius: 50%;
+            max-width: 100%;
+            max-height: 500px;
+            margin: auto;
+            display: inline;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    .textContent {
+        text-align: justify;
+        h3 {
+            color: $accent-color;
+        }
+    }
+}
