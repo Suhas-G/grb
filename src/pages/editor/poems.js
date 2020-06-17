@@ -24,9 +24,10 @@ class PoemEditor extends Editor {
           Axios.get(`/data/${this.dataType}/${filename}`)
           .then(response => {
             const data = response.data;
+            const paragraphs = this.combineParagraphLines(data.paragraphs);
             this.setState({
               title: data.title,
-              paragraphs: this.combineParagraphLines(data.paragraphs)
+              paragraphs: paragraphs.length > 0 ? paragraphs : [""]
             });
           })
           .catch(error => console.error(error));
