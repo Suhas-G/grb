@@ -6,6 +6,18 @@
     .active {
         color: $accent-color!important;
     }
+
+    @media (max-width: 991px) {
+        .loginBtn {
+            margin-top: 30px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .loginBtn {
+            margin-left: 60px;
+        }
+    }
 }
 
 .brand {

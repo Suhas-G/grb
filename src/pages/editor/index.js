@@ -5,11 +5,12 @@ import {
   Container,
   Form,
   Jumbotron,
-  Alert
+  Alert,
 } from "react-bootstrap";
 import Layout from "../../components/layouts/baseLayout";
 import EditorStyles from "./style.module.scss";
 import axios from "axios";
+import { getAuthData } from "../../auth/auth_utils";
 
 class Editor extends Layout {
   state = {
@@ -17,6 +18,7 @@ class Editor extends Layout {
     title: "",
     savePostSuccessful: false,
     showSavePostResponse: false,
+    showAuthenticationError: false,
   };
 
   constructor(props) {
@@ -27,21 +29,33 @@ class Editor extends Layout {
     this.postId = "";
   }
 
-  setAlertShow(show) {
-    this.setState({ showSavePostResponse: show });
+  setAlertShow(show, key) {
+    this.state[key] = show;
+    this.setState(this.state);
   }
 
   getAlertMessage() {
-    if (this.state.showSavePostResponse) {
+    if (this.state.showAuthenticationError) {
+      return (
+        <Alert
+          show={this.state.showAuthenticationError}
+          variant="danger"
+          onClose={() => this.setAlertShow(false, "showAuthenticationError")}
+          dismissible
+        >
+          You are not logged in. Please login to save.
+        </Alert>
+      );
+    } else if (this.state.showSavePostResponse) {
       if (this.state.savePostSuccessful) {
         return (
           <Alert
             show={this.state.showSavePostResponse}
             variant="success"
-            onClose={() => this.setAlertShow(false)}
+            onClose={() => this.setAlertShow(false, "showSavePostResponse")}
             dismissible
           >
-          Post saved successfully!
+            Post saved successfully!
           </Alert>
         );
       } else {
@@ -49,7 +63,7 @@ class Editor extends Layout {
           <Alert
             show={this.state.showSavePostResponse}
             variant="danger"
-            onClose={() => this.setAlertShow(false)}
+            onClose={() => this.setAlertShow(false, "showSavePostResponse")}
             dismissible
           >
             Error happened while saving post!
@@ -105,6 +119,11 @@ class Editor extends Layout {
   }
 
   onSave = async () => {
+    const {isAuthorised, accessToken} = getAuthData();
+    if (!isAuthorised) {
+      this.setState({ showAuthenticationError: true});
+      return;
+    }
     const titleTooltip = document.getElementById("titleRequiredTooltip");
     if (!this.state.title) {
       titleTooltip.style.display = "block";
@@ -119,8 +138,7 @@ class Editor extends Layout {
     );
     data.title = this.state.title;
     data.time = new Date();
-    console.log(data);
-    this.savePost(data);
+    this.savePost(data, accessToken);
   };
 
   onClear = () => {
@@ -191,7 +209,8 @@ class Editor extends Layout {
 
   getPostId() {}
 
-  async savePost(data) {
+  async savePost(data, accessToken) {
+    data.accessToken = accessToken;
     axios({
       headers: {
         "Content-Type": "application/json",
@@ -203,7 +222,7 @@ class Editor extends Layout {
     })
       .then((data) => {
         console.log(data);
-        this.showSaveSuccess()
+        this.showSaveSuccess();
       })
       .catch((error) => {
         console.error(error);
@@ -212,11 +231,11 @@ class Editor extends Layout {
   }
 
   showSaveSuccess() {
-    this.setState({showSavePostResponse: true, savePostSuccessful: true})
+    this.setState({ showSavePostResponse: true, savePostSuccessful: true });
   }
 
   showSaveFail() {
-    this.setState({showSavePostResponse: true, savePostSuccessful: false})
+    this.setState({ showSavePostResponse: true, savePostSuccessful: false });
   }
 }
 

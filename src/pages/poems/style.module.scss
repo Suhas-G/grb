@@ -3,14 +3,20 @@
 
 .container {
 
+    padding-bottom: 5em;
+
     .listTitle {
         text-align: center;
         margin-bottom: 2em;
     }
     
     .poemList {
+
+        min-height: 60vh;
     
         .poemListItem {
+            height: 30px;
+            box-sizing: content-box;
             padding: 0.5em 2em;
             display: block;
             text-align: center;
@@ -18,7 +24,6 @@
             color: black;
             background-color: $card-background;
             margin-top: 0.5em;
-            border-radius: 5px;
             
             &:hover{
                 text-decoration: none;
@@ -30,7 +35,8 @@
     }
 
     .footer {
-        margin-top: 5em;
+        margin-top: 2em;
+        margin-bottom: 2em;
         text-align: center;
         .newButton {
             padding: 0.5em 2em;
@@ -43,9 +49,18 @@
             &:hover {
                 text-decoration: none;
                 color: white;
+                box-shadow: 0px 2px 2px 0px #00000033;
             }
 
         }
+    }
+
+    .pagination {
+        margin-top: 2em;
+        display: inline-block;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
     }
     
 }

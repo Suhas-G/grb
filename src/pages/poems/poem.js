@@ -3,9 +3,10 @@ import Layout from "../../components/layouts/baseLayout";
 import PoemStyles from "./style.module.scss";
 import Axios from "axios";
 import { Jumbotron, Container } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { withAuthenticatedHOC } from "../../auth/auth_utils";
 
 const poemList = require("../../data/poems.json");
 
@@ -21,7 +22,7 @@ class Poem extends Layout {
   constructor(props) {
     super(props);
     this.postList = poemList.poems;
-    this.dataType = 'poems';
+    this.dataType = "poems";
     if (this.props) {
       this.postId = this.props.match.params.id;
     }
@@ -61,9 +62,14 @@ class Poem extends Layout {
           <h2 className={PoemStyles.poemTitle}>{this.state.title}</h2>
           <div className={PoemStyles.paragraphs}>{paragraphs}</div>
         </Container>
-        <Link className={PoemStyles.editButton} to={`/poems/${this.state.id}/edit`}>
+        {this.props.isAuthenticated && (
+          <Link
+            className={PoemStyles.editButton}
+            to={`/poems/${this.state.id}/edit`}
+          >
             <FontAwesomeIcon icon={faPencilAlt} />
-        </Link>
+          </Link>
+        )}
       </Jumbotron>
     );
   }
@@ -86,4 +92,4 @@ class Poem extends Layout {
   }
 }
 
-export default Poem;
+export default withAuthenticatedHOC(Poem);
